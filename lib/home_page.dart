@@ -11,6 +11,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController contactController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+
   List<Contact> contacts = List.empty(growable: true);
 
   int selectedIndex = -1;
@@ -20,7 +22,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Contacts List'),
+        title: const Text('Cadastro Contatos Odontologia'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -30,7 +32,7 @@ class _HomePageState extends State<HomePage> {
             TextField(
               controller: nameController,
               decoration: const InputDecoration(
-                  hintText: 'Contact Name',
+                  hintText: 'Nome',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
                     Radius.circular(10),
@@ -42,7 +44,19 @@ class _HomePageState extends State<HomePage> {
               keyboardType: TextInputType.number,
               maxLength: 10,
               decoration: const InputDecoration(
-                  hintText: 'Contact Number',
+                  hintText: 'Número',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ))),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: ageController,
+              maxLength: 3,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                  hintText: 'Idade',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
                     Radius.circular(10),
@@ -57,11 +71,14 @@ class _HomePageState extends State<HomePage> {
                       //
                       String name = nameController.text.trim();
                       String contact = contactController.text.trim();
-                      if (name.isNotEmpty && contact.isNotEmpty) {
+                      String age = ageController.text.trim();
+
+                      if (name.isNotEmpty && contact.isNotEmpty && age.isNotEmpty) {
                         setState(() {
                           nameController.text = '';
                           contactController.text = '';
-                          contacts.add(Contact(name: name, contact: contact));
+                          ageController.text = '';
+                          contacts.add(Contact(name: name, contact: contact, age: age));
                         });
                       }
                       //
@@ -71,25 +88,29 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       //
                       String name = nameController.text.trim();
+                      String age = ageController.text.trim();
                       String contact = contactController.text.trim();
-                      if (name.isNotEmpty && contact.isNotEmpty) {
+
+                      if (name.isNotEmpty && contact.isNotEmpty && age.isNotEmpty) {
                         setState(() {
                           nameController.text = '';
                           contactController.text = '';
+                          ageController.text = '';
                           contacts[selectedIndex].name = name;
                           contacts[selectedIndex].contact = contact;
-                          selectedIndex = -1;
+                          contacts[selectedIndex].age = age;
+                          selectedIndex = -5;
                         });
                       }
                       //
                     },
-                    child: const Text('Update')),
+                    child: const Text('Atualizar')),
               ],
             ),
             const SizedBox(height: 10),
             contacts.isEmpty
                 ? const Text(
-                    'No Contact yet..',
+                    'Nenhum contato ainda...',
                     style: TextStyle(fontSize: 22),
                   )
                 : Expanded(
@@ -135,6 +156,7 @@ class _HomePageState extends State<HomePage> {
                     //
                     nameController.text = contacts[index].name;
                     contactController.text = contacts[index].contact;
+                    ageController.text = contacts[index].age;
                     setState(() {
                       selectedIndex = index;
                     });

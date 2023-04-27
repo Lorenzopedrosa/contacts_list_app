@@ -1,5 +1,7 @@
 class Contact {
   String name;
   String contact;
-  Contact({required this.name, required this.contact});
+  String age;
+  Contact({required this.name, required this.contact, required this.age});
+
 }
