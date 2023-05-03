@@ -12,6 +12,9 @@ class _HomePageState extends State<HomePage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController contactController = TextEditingController();
   TextEditingController ageController = TextEditingController();
+  TextEditingController horarioController = TextEditingController();
+  TextEditingController dataController = TextEditingController();
+
 
   List<Contact> contacts = List.empty(growable: true);
 
@@ -22,7 +25,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Cadastro Contatos Odontologia'),
+        title: const Text('Agendamento Atual Odontologia'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -47,7 +50,7 @@ class _HomePageState extends State<HomePage> {
                   hintText: 'Número',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
-                    Radius.circular(10),
+                    Radius.circular(13),
                   ))),
             ),
             const SizedBox(height: 10),
@@ -63,6 +66,28 @@ class _HomePageState extends State<HomePage> {
                   ))),
             ),
             const SizedBox(height: 10),
+            TextField(
+              controller: horarioController,
+              maxLength: 10,
+              decoration: const InputDecoration(
+                  hintText: 'Horario',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ))),
+            ),
+             const SizedBox(height: 10),
+            TextField(
+              controller: dataController,
+              maxLength: 10,
+              decoration: const InputDecoration(
+                  hintText: 'Data da Consulta',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ))),
+            ),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -72,13 +97,17 @@ class _HomePageState extends State<HomePage> {
                       String name = nameController.text.trim();
                       String contact = contactController.text.trim();
                       String age = ageController.text.trim();
+                      String horario = horarioController.text.trim();
+                      String data = dataController.text.trim();
 
                       if (name.isNotEmpty && contact.isNotEmpty && age.isNotEmpty) {
                         setState(() {
                           nameController.text = '';
                           contactController.text = '';
                           ageController.text = '';
-                          contacts.add(Contact(name: name, contact: contact, age: age));
+                          horarioController.text = '';
+                          dataController.text = '';
+                          contacts.add(Contact(name: name, contact: contact, age: age, horario: horario, data: data));
                         });
                       }
                       //
@@ -90,15 +119,22 @@ class _HomePageState extends State<HomePage> {
                       String name = nameController.text.trim();
                       String age = ageController.text.trim();
                       String contact = contactController.text.trim();
+                      String horario = horarioController.text.trim();
+                      String data = dataController.text.trim();
 
-                      if (name.isNotEmpty && contact.isNotEmpty && age.isNotEmpty) {
+                      if (name.isNotEmpty && contact.isNotEmpty && age.isNotEmpty && horario.isNotEmpty && data.isNotEmpty) {
                         setState(() {
                           nameController.text = '';
                           contactController.text = '';
                           ageController.text = '';
+                          horarioController.text = '';
+                          dataController.text = '';
+
                           contacts[selectedIndex].name = name;
                           contacts[selectedIndex].contact = contact;
                           contacts[selectedIndex].age = age;
+                          contacts[selectedIndex].horario = horario;
+                          contacts[selectedIndex].data = data;
                           selectedIndex = -5;
                         });
                       }
@@ -110,7 +146,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 10),
             contacts.isEmpty
                 ? const Text(
-                    'Nenhum contato ainda...',
+                    'Nenhum agendamento ainda...',
                     style: TextStyle(fontSize: 22),
                   )
                 : Expanded(
@@ -144,8 +180,19 @@ class _HomePageState extends State<HomePage> {
               contacts[index].name,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
+            Text(
+              contacts[index].age,
+            ),
+            Text(
+              contacts[index].horario,
+            ),
+            Text(
+              contacts[index].data,
+            ),
+            
             Text(contacts[index].contact),
-          ],
+          ],           
+          
         ),
         trailing: SizedBox(
           width: 70,
@@ -157,6 +204,8 @@ class _HomePageState extends State<HomePage> {
                     nameController.text = contacts[index].name;
                     contactController.text = contacts[index].contact;
                     ageController.text = contacts[index].age;
+                    horarioController.text = contacts[index].horario;
+                    dataController.text = contacts[index].data;
                     setState(() {
                       selectedIndex = index;
                     });
